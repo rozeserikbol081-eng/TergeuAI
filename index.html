@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Система учета дел</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f172a;
+      color: white;
+      padding: 20px;
+    }
+    input, button, textarea {
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 8px;
+      border: none;
+    }
+    button {
+      background: #38bdf8;
+      cursor: pointer;
+    }
+    .card {
+      background: #1e293b;
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 10px;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>📁 Поиск дела</h2>
+
+<input type="text" id="caseNumber" placeholder="Введите номер дела">
+<button onclick="findCase()">Найти</button>
+
+<div id="result" class="card"></div>
+
+<h2>📝 Постановление</h2>
+<button onclick="generateDoc()">Сгенерировать</button>
+
+<textarea id="doc"></textarea>
+
+<script>
+// БАЗА ДАННЫХ (пример)
+let cases = {
+  "123": {
+    name: "Иванов И.И.",
+    article: "ст. 190 УК РК",
+    date: "12.03.2026",
+    investigator: "Касымов А.А."
+  },
+  "456": {
+    name: "Петров П.П.",
+    article: "ст. 188 УК РК",
+    date: "10.02.2026",
+    investigator: "Серикова Д.Д."
+  }
+};
+
+let currentCase = null;
+
+function findCase() {
+  let num = document.getElementById("caseNumber").value;
+  let res = document.getElementById("result");
+
+  if (cases[num]) {
+    currentCase = cases[num];
+    res.innerHTML = `
+      <p><b>ФИО:</b> ${currentCase.name}</p>
+      <p><b>Статья:</b> ${currentCase.article}</p>
+      <p><b>Дата:</b> ${currentCase.date}</p>
+      <p><b>Следователь:</b> ${currentCase.investigator}</p>
+    `;
+  } else {
+    res.innerHTML = "❌ Дело не найдено";
+  }
+}
+
+function generateDoc() {
+  if (!currentCase) {
+    alert("Сначала найдите дело!");
+    return;
+  }
+
+  let text = `
+ПОСТАНОВЛЕНИЕ
+
+о возбуждении уголовного дела
+
+г. Астана
+${currentCase.date}
+
+Следователь ${currentCase.investigator}, рассмотрев материалы дела,
+
+УСТАНОВИЛ:
+Гражданин ${currentCase.name} подозревается в совершении преступления, предусмотренного ${currentCase.article}.
+
+ПОСТАНОВИЛ:
+Возбудить уголовное дело по данному факту.
+
+Следователь: ____________
+  `;
+
+  document.getElementById("doc").value = text;
+}
+</script>
+
+</body>
+</html>
